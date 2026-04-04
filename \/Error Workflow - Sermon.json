@@ -1,0 +1,136 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-04T00:35:57.000Z",
+    "createdAt": "2026-04-04T00:35:37.703Z",
+    "versionId": "aee9d151-8521-4dc5-8aa2-712725ca5a8c",
+    "workflowId": "Dx3yIO17tRdVKNHl",
+    "nodes": [
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          -336,
+          -48
+        ],
+        "id": "aaf58ee9-4c37-4332-8061-fbbf52ef90c3",
+        "name": "Error Trigger"
+      },
+      {
+        "parameters": {
+          "from": "5864002091",
+          "to": "2489096304",
+          "message": "=URL : {{ $json.execution.url }}\nMESSAGE: {{ $json.execution.error.message }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.twilio",
+        "typeVersion": 1,
+        "position": [
+          -112,
+          -48
+        ],
+        "id": "ded5d053-2bb0-44fe-b97e-6237d33e360a",
+        "name": "Send an SMS/MMS/WhatsApp message",
+        "credentials": {
+          "twilioApi": {
+            "id": "skr1k8OUWVdTZzhy",
+            "name": "Twilio account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Send an SMS/MMS/WhatsApp message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jason Umphrey",
+    "name": "Version Initial",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "aee9d151-8521-4dc5-8aa2-712725ca5a8c",
+  "connections": {
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send an SMS/MMS/WhatsApp message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-04T00:17:15.069Z",
+  "id": "Dx3yIO17tRdVKNHl",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Error Workflow - Sermon",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        -48
+      ],
+      "id": "aaf58ee9-4c37-4332-8061-fbbf52ef90c3",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "from": "5864002091",
+        "to": "2489096304",
+        "message": "=URL : {{ $json.execution.url }}\nMESSAGE: {{ $json.execution.error.message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        -48
+      ],
+      "id": "ded5d053-2bb0-44fe-b97e-6237d33e360a",
+      "name": "Send an SMS/MMS/WhatsApp message",
+      "credentials": {
+        "twilioApi": {
+          "id": "skr1k8OUWVdTZzhy",
+          "name": "Twilio account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-04T00:17:15.071Z",
+      "createdAt": "2026-04-04T00:17:15.071Z",
+      "role": "workflow:owner",
+      "workflowId": "Dx3yIO17tRdVKNHl",
+      "projectId": "6HGCoxnhApqGzoKS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-04T00:35:37.702Z",
+  "versionId": "aee9d151-8521-4dc5-8aa2-712725ca5a8c"
+}

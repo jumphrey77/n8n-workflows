@@ -1,0 +1,693 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "aggregateChunkAnalyses Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "aggregateChunkAnalyses Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Sermon Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Sermon Analysis": {
+      "main": [
+        [
+          {
+            "node": "Prepare Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s)1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-05T03:18:21.316Z",
+  "id": "GhVdlMhQYEwh7kay",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "03-First Analysis",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        -304
+      ],
+      "id": "0720f59a-6cd9-406b-b2bd-8fcac918c0a9",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pLOz1DDpgyjVtZ9N",
+          "mode": "list",
+          "cachedResultName": "Videos",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/pLOz1DDpgyjVtZ9N"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "processed",
+              "condition": "isTrue"
+            },
+            {
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -320,
+        -304
+      ],
+      "id": "a7a00f92-bb5d-48c9-ae04-c73ceeec6858",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "function chunkTranscript(input) {\n  const sermonId = input.id ?? null;\n  const title = input.title ?? '';\n  const speaker = input.speaker ?? 'John Does';\n  const date = '1/12/2025';\n  const transcript = (input.transcript ?? '').trim();\n\n  const MAX_CHARS_PER_CHUNK = 12000;\n  const MIN_CHARS_PER_CHUNK = 4000;\n\n  if (!transcript) {\n    throw new Error('Transcript is empty.');\n  }\n\n  const cleanText = transcript\n    .replace(/\\r\\n/g, '\\n')\n    .replace(/\\t/g, ' ')\n    .replace(/[ ]{2,}/g, ' ')\n    .replace(/\\n{3,}/g, '\\n\\n')\n    .trim();\n\n  const paragraphs = cleanText\n    .split(/\\n\\s*\\n/)\n    .map(p => p.trim())\n    .filter(Boolean);\n\n  const chunks = [];\n  let currentChunk = '';\n\n  for (const paragraph of paragraphs) {\n    if ((currentChunk + '\\n\\n' + paragraph).trim().length <= MAX_CHARS_PER_CHUNK) {\n      currentChunk = currentChunk\n        ? `${currentChunk}\\n\\n${paragraph}`\n        : paragraph;\n      continue;\n    }\n\n    if (currentChunk.length >= MIN_CHARS_PER_CHUNK) {\n      chunks.push(currentChunk.trim());\n      currentChunk = paragraph;\n      continue;\n    }\n\n    const sentences = paragraph.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [paragraph];\n\n    for (const sentence of sentences) {\n      if ((currentChunk + ' ' + sentence).trim().length <= MAX_CHARS_PER_CHUNK) {\n        currentChunk = currentChunk\n          ? `${currentChunk} ${sentence.trim()}`\n          : sentence.trim();\n      } else {\n        if (currentChunk.trim()) {\n          chunks.push(currentChunk.trim());\n        }\n        currentChunk = sentence.trim();\n      }\n    }\n  }\n\n  if (currentChunk.trim()) {\n    chunks.push(currentChunk.trim());\n  }\n\n  return {\n    sermonId,\n    title,\n    speaker,\n    date,\n    chunkCount: chunks.length,\n    chunks: chunks.map((chunkText, index) => ({\n      sermonId,\n      title,\n      speaker,\n      date,\n      chunkIndex: index + 1,\n      chunkText\n    }))\n  };\n}\n\nconst input = $input.first().json;\nconst result = chunkTranscript(input);\n\nreturn [\n  {\n    json: result\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        -304
+      ],
+      "id": "aca2bf83-3e26-45ad-a4e1-e8d98057aa62",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "chunks",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        112,
+        -304
+      ],
+      "id": "66435e93-9ef0-4ca0-a458-2bcb67f6f84e",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:1234/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer lm-studio"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: \"qwen2.5-7b-instruct-1m/v1/chat/completions\",\n  temperature: 0.2,\n  messages: [\n    {\n      role: \"system\",\n      content: \"You analyze sermon transcript excerpts. Be faithful to the text. Do not invent missing content.Return raw JSON only. Do not wrap the JSON in markdown. Do not use ```json fences. Use double quotes for all keys and all string values. Never use single quotes in JSON. Do not include trailing commas.\"\n    },\n    {\n      role: \"user\",\n      content:\n        \"Analyze this sermon transcript chunk and return valid JSON with these fields: chunk_summary, main_ideas, scripture_references, themes, applications, doctrinal_observations, notable_quotes, uncertainties.\\n\\n\" +\n        \"Sermon title: \" + ($json.title ?? \"\") + \"\\n\" +\n        \"Speaker: \" + ($json.speaker ?? \"\") + \"\\n\" +\n        \"Date: \" + ($json.date ?? \"\") + \"\\n\" +\n        \"Chunk index: \" + ($json.chunkIndex ?? \"\") + \"\\n\\n\" +\n        \"Transcript chunk:\\n\" + ($json.chunkText ?? \"\")\n    }\n  ]\n}) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        320,
+        -304
+      ],
+      "id": "f1e4942d-ca8e-4055-91bb-242c80fb3a50",
+      "name": "HTTP Request",
+      "notes": "Return raw JSON only.\nDo not wrap the JSON in markdown.\nDo not use ```json fences."
+    },
+    {
+      "parameters": {
+        "jsCode": "function parseChunkResponse(input) {\n  const content = input?.choices?.[0]?.message?.content ?? '';\n\n  let cleaned = content.trim();\n\n  // Remove markdown fences\n  cleaned = cleaned\n    .replace(/^```json\\s*/i, '')\n    .replace(/^```\\s*/i, '')\n    .replace(/\\s*```$/i, '')\n    .trim();\n\n  // Try to isolate JSON object\n  const firstBrace = cleaned.indexOf('{');\n  const lastBrace = cleaned.lastIndexOf('}');\n\n  let jsonText = cleaned;\n  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {\n    jsonText = cleaned.slice(firstBrace, lastBrace + 1);\n  }\n\n  let parsed = null;\n  let parseError = null;\n\n  try {\n    parsed = JSON.parse(jsonText);\n  } catch (err) {\n    parseError = err.message;\n  }\n\n  return {\n    sermonId: input.sermonId ?? null,\n    chunkIndex: input.chunkIndex ?? null,\n    parsed,\n    parseOk: parsed !== null,\n    parseError,\n    rawContent: content,\n    extractedText: jsonText\n  };\n}\n\nconst input = $input.first().json;\nconst result = parseChunkResponse(input);\n\nreturn [{ json: result }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        112,
+        -80
+      ],
+      "id": "bc4943f4-a6e2-42e8-94ca-2a9057996d0c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "jsCode": "function aggregateChunkAnalyses(items) {\n  const validItems = items\n    .map(item => item.json)\n    .filter(item => item.parseOk && item.parsed);\n\n  if (!validItems.length) {\n    throw new Error('No valid parsed chunk analyses found.');\n  }\n\n  const first = validItems[0];\n\n  return {\n    sermonId: first.sermonId ?? null,\n    chunkCount: validItems.length,\n    chunkAnalyses: validItems\n      .map(item => ({\n        chunkIndex: item.chunkIndex,\n        ...item.parsed\n      }))\n      .sort((a, b) => (a.chunkIndex ?? 0) - (b.chunkIndex ?? 0))\n  };\n}\n\nconst items = $input.all();\nconst result = aggregateChunkAnalyses(items);\n\nreturn [\n  {\n    json: result\n  }\n];;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        -80
+      ],
+      "id": "698fb0e3-fee1-4c0b-8042-60fe6516037b",
+      "name": "aggregateChunkAnalyses Code"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:1234/v1/chat/completions",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{\nJSON.stringify({\n  model: \"Qwen2.5-7B-Instruct-GGUF\",\n  temperature: 0.2,\n  messages: [\n    {\n      role: \"system\",\n      content: \"You analyze complete sermon data compiled from chunk analyses. Be faithful to the source material. Do not invent missing content. Return raw JSON only. Do not wrap the JSON in markdown. Do not use ```json fences. Use double quotes for all keys and all string values. Never use single quotes in JSON. Do not include trailing commas.\"\n    },\n    {\n      role: \"user\",\n      content:\n        \"Using the chunk analyses below, create a sermon-level analysis.\\n\\n\" +\n        \"Return valid JSON with these fields:\\n\" +\n        \"executive_summary,\\n\" +\n        \"sermon_thesis,\\n\" +\n        \"main_points,\\n\" +\n        \"key_themes,\\n\" +\n        \"key_scriptures,\\n\" +\n        \"applications,\\n\" +\n        \"notable_quotes,\\n\" +\n        \"speaker_tone_observations,\\n\" +\n        \"open_questions.\\n\\n\" +\n        \"Chunk analyses:\\n\" +\n        JSON.stringify($json.chunkAnalyses)\n    }\n  ]\n})\n}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        592,
+        -304
+      ],
+      "id": "23bcc3ff-b7a9-4ef4-b817-d3ffa37d1e6a",
+      "name": "HTTP Sermon Analysis"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "WZd6H1AhVfnR3vWx",
+          "mode": "list",
+          "cachedResultName": "sermon_analysis",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/WZd6H1AhVfnR3vWx"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "model_name": "={{ $json.model }}",
+            "executive_summary": "={{ $json.choices[0].message.content }}",
+            "key_scriptures_json": "={{ $('Code in JavaScript1').item.json.parsed.scripture_references }}",
+            "key_themes_json": "={{ $('Code in JavaScript1').item.json.parsed.themes }}",
+            "applications_json": "={{ $('Code in JavaScript1').item.json.parsed.applications }}",
+            "sermon_id": "={{ $('Code in JavaScript').item.json.chunks[0].sermonId }}",
+            "chunk_count": "={{ $('Code in JavaScript').item.json.chunkCount }}",
+            "chunk_analyses_json": "={{ $('aggregateChunkAnalyses Code').item.json.chunkAnalyses[0].chunk_summary }}",
+            "main_points_json": "={{ $('aggregateChunkAnalyses Code').item.json.chunkAnalyses[0].main_ideas }}",
+            "analysis_id": "={{ $json.id }}",
+            "created_at": "={{ $json.created }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "analysis_id",
+              "displayName": "analysis_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sermon_id",
+              "displayName": "sermon_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "analysis_version",
+              "displayName": "analysis_version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "model_name",
+              "displayName": "model_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "chunk_count",
+              "displayName": "chunk_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "analysis_status",
+              "displayName": "analysis_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "executive_summary",
+              "displayName": "executive_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sermon_thesis",
+              "displayName": "sermon_thesis",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "main_points_json",
+              "displayName": "main_points_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "key_themes_json",
+              "displayName": "key_themes_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "key_scriptures_json",
+              "displayName": "key_scriptures_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "applications_json",
+              "displayName": "applications_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "notable_quotes_json",
+              "displayName": "notable_quotes_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "speaker_tone_observations",
+              "displayName": "speaker_tone_observations",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "open_questions_json",
+              "displayName": "open_questions_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "chunk_analyses_json",
+              "displayName": "chunk_analyses_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "final_analysis_json",
+              "displayName": "final_analysis_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "parse_notes",
+              "displayName": "parse_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "analyzed_at",
+              "displayName": "analyzed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        928,
+        -304
+      ],
+      "id": "fecbcb3e-0cdc-4706-9928-1da22e703582",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "jsCode": "function prepareForDataTable(input) {\n  return {\n    sermonId: input.sermonId ?? null,\n    executive_summary: input.executive_summary ?? \"\",\n    sermon_thesis: input.sermon_thesis ?? \"\",\n    main_points_json: JSON.stringify(input.main_points ?? []),\n    key_themes_json: JSON.stringify(input.key_themes ?? []),\n    key_scriptures_json: JSON.stringify(input.key_scriptures ?? []),\n    applications_json: JSON.stringify(input.applications ?? []),\n    notable_quotes_json: JSON.stringify(input.notable_quotes ?? []),\n    open_questions_json: JSON.stringify(input.open_questions ?? [])\n  };\n}\n\nconst input = $input.first().json;\nconst result = prepareForDataTable(input);\n\nreturn [{ json: result }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -112
+      ],
+      "id": "3cd00403-ecc3-4aa6-b7d6-151012fed3b1",
+      "name": "Prepare Data"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this sermon transcript chunk.\n\nReturn output that matches the provided schema exactly.\nDo not add extra fields.\nDo not rename fields.\nIf no opening prayer is present, return an empty string for opening_prayer.\nIf no closing prayer is present, return an empty string for closing_prayer.\nIf any array field has no content, return an empty array.\n\nSermon title: {title}\nSpeaker: {speaker}\nDate: {date}\nChunk index: {chunkIndex}\n\nTranscript chunk:\n{{ $json.transcript }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": []
+        },
+        "batching": {
+          "batchSize": 4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -272,
+        64
+      ],
+      "id": "911f193b-5bf6-4193-bf9c-4730741da10a",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "qwen2.5-7b-instruct-1m",
+          "mode": "list",
+          "cachedResultName": "qwen2.5-7b-instruct-1m"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -272,
+        288
+      ],
+      "id": "015edd1e-4cce-4eeb-ae04-7ee3b9795ebf",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "EhYy7N3KJ4M63t0y",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hZVaT4yrkTWTTufP",
+          "mode": "list",
+          "cachedResultName": "sermons",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/hZVaT4yrkTWTTufP"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "transcript_text",
+              "condition": "isNotEmpty"
+            },
+            {
+              "keyValue": "2"
+            },
+            {
+              "keyName": "do_not_process",
+              "condition": "isFalse"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -576,
+        64
+      ],
+      "id": "15786907-dd6a-4051-8620-3d0b3b77085c",
+      "name": "Get row(s)1",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -848,
+        64
+      ],
+      "id": "60ab06e6-d548-4a99-afe7-305b2f24bc29",
+      "name": "When chat message received",
+      "webhookId": "c189c15f-9ee1-46e5-b911-27f4000437e5"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"opening_prayer\": {\n      \"type\": \"string\"\n    },\n    \"closing_prayer\": {\n      \"type\": \"string\"\n    },\n    \"chunk_summary\": {\n      \"type\": \"string\"\n    },\n    \"main_ideas\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"scripture_references\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"themes\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"applications\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"doctrinal_observations\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"notable_quotes\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"uncertainties\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"string\"\n      }\n    }\n  },\n  \"required\": [\n    \"opening_prayer\",\n    \"closing_prayer\",\n    \"chunk_summary\",\n    \"main_ideas\",\n    \"scripture_references\",\n    \"themes\",\n    \"applications\",\n    \"doctrinal_observations\",\n    \"notable_quotes\",\n    \"uncertainties\"\n  ],\n  \"additionalProperties\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -48,
+        272
+      ],
+      "id": "ba2a4274-2f86-4ff2-8ed1-c41c6a55d1d5",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-05T03:18:21.320Z",
+      "createdAt": "2026-04-05T03:18:21.320Z",
+      "role": "workflow:owner",
+      "workflowId": "GhVdlMhQYEwh7kay",
+      "projectId": "6HGCoxnhApqGzoKS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-06T01:54:58.940Z",
+  "versionId": "d75ed3d5-3698-4a9a-a9f6-033180f83124"
+}

@@ -1,0 +1,1953 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-06T05:27:02.000Z",
+    "createdAt": "2026-04-06T05:26:22.182Z",
+    "versionId": "e62b686d-1f7a-43ea-8771-7fad50f9bb32",
+    "workflowId": "9MRKKnQN0xI6qYdc",
+    "nodes": [
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "version": 2,
+              "leftValue": "",
+              "caseSensitive": true,
+              "typeValidation": "loose"
+            },
+            "combinator": "and",
+            "conditions": [
+              {
+                "id": "b8927a53-2755-4364-84b1-5340c5c31af5",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                },
+                "leftValue": "={{ $json.is_valid }}",
+                "rightValue": ""
+              }
+            ]
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "id": "4c2290d5-8e41-4f83-b4bb-9c34ad651084",
+        "name": "If",
+        "type": "n8n-nodes-base.if",
+        "position": [
+          -544,
+          304
+        ],
+        "typeVersion": 2.2
+      },
+      {
+        "parameters": {
+          "content": "## Entry Point\n\nThe workflow entry point is the  node chat message.",
+          "height": 708,
+          "width": 396,
+          "color": 5
+        },
+        "id": "90483507-e54e-4ae7-81ec-f8c8c8491510",
+        "name": "Sticky Note",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -2112,
+          -48
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## Validation - URL\n\nThis node ensures that only a valid youtube video url goes forward.",
+          "height": 900,
+          "width": 492,
+          "color": 3
+        },
+        "id": "cf489d3c-a245-4fe4-adf9-9cbbdc8114fd",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1152,
+          400
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## Data Structuring\n\nHere is the core of the workflow, where structuring is done to get the right format to answer.\n\n**NOTE:**\n\n1. Users implementing this template must modify the language in the OpenAI prompt to suit their desired output.\n\n2. An OpenAI API key is essential and must be properly configured to support data structuring and processing.  ",
+          "height": 560,
+          "width": 460,
+          "color": 4
+        },
+        "id": "825e4ba3-92c1-4ec1-b997-188f93a18230",
+        "name": "Sticky Note2",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          992,
+          -208
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## Supadata\n\nSupadata is a powerful tool that converts YouTube video URLs into structured data via a simple API. It efficiently extracts transcriptions, making it ideal for AI training, data analysis, or text-based applications.\n\n**NOTE:**\n\n1. Users implementing this template must change the language in the query parameter to suit their needs. \n\n2. An API key is required and must be configured for the workflow to function properly.",
+          "height": 900,
+          "width": 508,
+          "color": 7
+        },
+        "id": "44b60ccc-8e37-4c23-8f34-c1b011e4b6d0",
+        "name": "Sticky Note4",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          912,
+          400
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "## Description\n\nThis workflow simplifies access to YouTube video content converting into clear and concise transcriptions, ideal for users seeking practicality. It transcribes YouTube videos directly and returns the text, eliminating the need to watch the full video. \n\nThe need for this workflow arose from the demands of studying, where, amidst the fast-paced routine of daily life, reading transcribed content proved faster and more efficient for creating summaries than watching entire videos. Often, time constraints make it difficult to watch videos in full, and written text allows for quicker absorption of information. This solution provides a seamless way to access and review content from any YouTube video, regardless of the topic.",
+          "height": 348,
+          "width": 416
+        },
+        "id": "7ae34bd3-4479-4fae-b865-f6e46905f4aa",
+        "name": "Sticky Note5",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1920,
+          256
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "97e0c175-8060-43da-9761-5c25d660c7ed",
+                "name": "text",
+                "type": "string",
+                "value": "={{ $json.message.content }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "4801b0dd-37f8-497b-8c0e-235cc38eff04",
+        "name": "Edit Fields - Respond to Chat Message 3",
+        "type": "n8n-nodes-base.set",
+        "position": [
+          1200,
+          -80
+        ],
+        "typeVersion": 3.4
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "66270798-60eb-4ab8-8572-ab957474e260",
+                "name": "text",
+                "type": "string",
+                "value": "=Something went wrong with the data structuring."
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "115a4e59-3a7b-4b0a-a876-c324d642a306",
+        "name": "Edit Fields - Respond to Chat Message 4",
+        "type": "n8n-nodes-base.set",
+        "position": [
+          1168,
+          128
+        ],
+        "typeVersion": 3.4
+      },
+      {
+        "parameters": {
+          "url": "=https://api.supadata.ai/v1/youtube/transcript?url={{ $json.text }}&text=true&lang=en",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "x-api-key",
+                "value": "sd_f890ce59d03d2eea435d6a005b6c04a3"
+              }
+            ]
+          },
+          "options": {
+            "timeout": 300000
+          }
+        },
+        "id": "81da4867-d04c-4715-9314-f76256abd025",
+        "name": "HTTP Request",
+        "type": "n8n-nodes-base.httpRequest",
+        "position": [
+          -560,
+          528
+        ],
+        "executeOnce": true,
+        "notesInFlow": true,
+        "retryOnFail": false,
+        "typeVersion": 4.2,
+        "alwaysOutputData": true,
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "modelId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "gpt-4o-mini-2024-07-18",
+            "cachedResultName": "GPT-4O-MINI-2024-07-18"
+          },
+          "messages": {
+            "values": [
+              {
+                "content": "You are an expert in grammar corrections and textual structuring.\n\nCorrect the classification of the provided text, adding commas, periods, question marks and other symbols necessary for natural and consistent reading. Do not change any words, just adjust the punctuation according to the grammatical rules and context.\n\nOrganize your content using markdown, structuring it with titles, subtitles, lists or other protected elements to clearly highlight the topics and information captured. Leave it in Portuguese and remember to always maintain the original formatting.\n\nTextual organization should always be a priority according to the content of the text, as well as the appropriate title, which must make sense.",
+                "role": "system"
+              },
+              {
+                "content": "={{ $json.content }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "1acac595-af95-443a-8cd3-58e709507966",
+        "name": "OpenAI",
+        "type": "@n8n/n8n-nodes-langchain.openAi",
+        "position": [
+          720,
+          -112
+        ],
+        "retryOnFail": true,
+        "typeVersion": 1.8,
+        "credentials": {
+          "openAiApi": {
+            "id": "EhYy7N3KJ4M63t0y",
+            "name": "OpenAI account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          -1376,
+          144
+        ],
+        "id": "851d86fc-721b-498d-8982-6c8a740fdf76",
+        "name": "When chat message received",
+        "webhookId": "53784aa9-d6e4-4832-a4c1-6293cb9c1726",
+        "notesInFlow": true
+      },
+      {
+        "parameters": {
+          "operation": "write",
+          "fileName": "=/files/{{ $('If').item.json.video_id }}.json",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.readWriteFile",
+        "typeVersion": 1.1,
+        "position": [
+          384,
+          16
+        ],
+        "id": "8063b881-7ec0-43b5-b7d8-472922c3c985",
+        "name": "Read/Write Files from Disk1"
+      },
+      {
+        "parameters": {
+          "operation": "toText",
+          "sourceProperty": "content",
+          "options": {
+            "fileName": "=/files/{{ $('Loop Over Items').item.json.video_id }}.json"
+          }
+        },
+        "type": "n8n-nodes-base.convertToFile",
+        "typeVersion": 1.1,
+        "position": [
+          144,
+          32
+        ],
+        "id": "b7c91736-cee7-418e-b20a-df7339f41403",
+        "name": "Convert to File",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "workflowInputs": {
+            "values": [
+              {
+                "name": "organization_id",
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflowTrigger",
+        "typeVersion": 1.1,
+        "position": [
+          -1216,
+          704
+        ],
+        "id": "4ca2f543-bed2-4ea9-9a30-939fbacbcf02",
+        "name": "When Executed by Another Workflow"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pLOz1DDpgyjVtZ9N",
+            "mode": "list",
+            "cachedResultName": "Videos",
+            "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/pLOz1DDpgyjVtZ9N"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "location",
+                "condition": "ilike",
+                "keyValue": "={{ $json.location }}"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -864,
+          144
+        ],
+        "id": "3d36a832-798e-4c23-ae55-9a84d0d75748",
+        "name": "Get row(s)"
+      },
+      {
+        "parameters": {
+          "batchSize": 10,
+          "options": {
+            "reset": false
+          }
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -592,
+          48
+        ],
+        "id": "d22f2a50-55e9-4b83-a7a7-2c2d622e820c",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "dataTableId": {
+            "__rl": true,
+            "value": "pLOz1DDpgyjVtZ9N",
+            "mode": "list",
+            "cachedResultName": "Videos",
+            "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/pLOz1DDpgyjVtZ9N"
+          },
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "vid",
+                "keyValue": "={{ $('Loop Over Items').item.json.video_id }}"
+              }
+            ]
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "processed": true,
+              "transcript": "={{ $('HTTP Request').item.json.content }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "vid",
+                "displayName": "vid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "title",
+                "displayName": "title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "url",
+                "displayName": "url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "location",
+                "displayName": "location",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "runtime",
+                "displayName": "runtime",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "date",
+                "displayName": "date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "viewCount",
+                "displayName": "viewCount",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "thumbnail",
+                "displayName": "thumbnail",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "language",
+                "displayName": "language",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "processed",
+                "displayName": "processed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "transcript",
+                "displayName": "transcript",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          656,
+          512
+        ],
+        "id": "c2af205c-35f4-471b-be23-82e3240785e5",
+        "name": "Update row(s)"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "20c51da5-8a3f-4b7c-8df4-ad53b13e4dfa",
+                "leftValue": "={{ $('Get Run Configuration').item.json.saveToDisk }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -144,
+          64
+        ],
+        "id": "b8bf5113-a093-4358-a4b8-4d38d7aeb467",
+        "name": "If SaveToDisk"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "a1b0ce4b-700c-4f53-992a-77a256ba1898",
+                "leftValue": "={{ $('Get Run Configuration').item.json.saveToTable }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -144,
+          208
+        ],
+        "id": "876acd57-927e-4fe5-b48d-18f406bb2267",
+        "name": "If SaveToTable"
+      },
+      {
+        "parameters": {
+          "language": "pythonNative",
+          "pythonCode": "import re\n\ndef youtube_video_url_validator(video_url):\n    try:\n        if not video_url:\n            return {\"text\": \"URL is required.\", \"is_valid\": False}\n\n        # Clean URL\n        video_url = re.sub(r\"\\s{2,}\", \" \", str(video_url).strip())\n\n        # Allow shorter youtu.be links too, so removed the old length check\n        patterns = [\n            r'^https?://(?:www\\.)?youtube\\.com/watch\\?v=[\\w-]{11}(?:[&#?].*)?$',\n            r'^https?://youtu\\.be/[\\w-]{11}(?:[?#].*)?$',\n            r'^https?://(?:www\\.)?youtube\\.com/embed/[\\w-]{11}(?:[?#].*)?$',\n            r'^https?://(?:www\\.)?youtube\\.com/v/[\\w-]{11}(?:[?#].*)?$',\n        ]\n\n        is_valid = any(re.match(pattern, video_url) for pattern in patterns)\n\n        if not is_valid:\n            return {\"text\": \"Invalid YouTube URL format.\", \"is_valid\": False}\n\n        match = re.search(r'(?:v=|youtu\\.be/|embed/|v/)([\\w-]{11})', video_url)\n        video_url_id = match.group(1) if match else None\n\n        return {\n            \"text\": video_url,\n            \"is_valid\": True,\n            \"video_id\": video_url_id\n        }\n\n    except Exception as ex:\n        return {\"text\": str(ex), \"is_valid\": False}\n\n\noutput = []\n\nfor item in _items:\n    chat_input = item.get(\"json\", {}).get(\"url\", \"\")\n    result = youtube_video_url_validator(chat_input)\n    output.append({\"json\": result})\n\nreturn output"
+        },
+        "id": "622b1b3e-f039-4216-b7cc-a66d9fcf165d",
+        "name": "Validate URLs",
+        "type": "n8n-nodes-base.code",
+        "position": [
+          -880,
+          496
+        ],
+        "typeVersion": 2
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -1376,
+          336
+        ],
+        "id": "8b94c5d8-5985-4734-9f2c-860e61b2c506",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "dataTableId": {
+            "__rl": true,
+            "value": "4SghQMCcafBzSv2R",
+            "mode": "list",
+            "cachedResultName": "Config",
+            "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/4SghQMCcafBzSv2R"
+          },
+          "matchType": "allConditions",
+          "filters": {
+            "conditions": [
+              {
+                "keyName": "location",
+                "keyValue": "fbcr"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -1152,
+          336
+        ],
+        "id": "d7fd95fa-f3a7-4994-9b44-8a9ec341fce5",
+        "name": "Get Run Configuration"
+      },
+      {
+        "parameters": {
+          "dataTableId": {
+            "__rl": true,
+            "value": "G3cejNk0hgTiJkbQ",
+            "mode": "list",
+            "cachedResultName": "ErrorLog",
+            "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/G3cejNk0hgTiJkbQ"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "message",
+                "displayName": "message",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "vid",
+                "displayName": "vid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              },
+              {
+                "id": "url",
+                "displayName": "url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "readOnly": false,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dataTable",
+        "typeVersion": 1.1,
+        "position": [
+          -176,
+          544
+        ],
+        "id": "43b1273a-1800-4dec-b74c-5fbc47dc5dc1",
+        "name": "Insert row"
+      }
+    ],
+    "connections": {
+      "If": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "HTTP Request": {
+        "main": [
+          [
+            {
+              "node": "If SaveToDisk",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "If SaveToTable",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Insert row",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI": {
+        "main": [
+          [
+            {
+              "node": "Edit Fields - Respond to Chat Message 3",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Edit Fields - Respond to Chat Message 4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When chat message received": {
+        "main": [
+          []
+        ]
+      },
+      "Convert to File": {
+        "main": [
+          [
+            {
+              "node": "Read/Write Files from Disk1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When Executed by Another Workflow": {
+        "main": [
+          []
+        ]
+      },
+      "Get row(s)": {
+        "main": [
+          [
+            {
+              "node": "Validate URLs",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Read/Write Files from Disk1": {
+        "main": [
+          [
+            {
+              "node": "Update row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update row(s)": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If SaveToDisk": {
+        "main": [
+          [
+            {
+              "node": "Convert to File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If SaveToTable": {
+        "main": [
+          [
+            {
+              "node": "Update row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Validate URLs": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "Get Run Configuration",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get Run Configuration": {
+        "main": [
+          [
+            {
+              "node": "Get row(s)",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert row": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jason Umphrey",
+    "name": "Version e62b686d",
+    "description": "",
+    "autosaved": true
+  },
+  "activeVersionId": "e62b686d-1f7a-43ea-8771-7fad50f9bb32",
+  "connections": {
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If SaveToDisk And Available",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If SaveToTable",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields - Respond to Chat Message 3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields - Respond to Chat Message 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        []
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        []
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Validate URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk1": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row(s)": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If SaveToTable": {
+      "main": [
+        [
+          {
+            "node": "Update row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate URLs": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Run Configuration",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Run Configuration": {
+      "main": [
+        [
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If SaveToDisk And Available": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-04T00:37:42.135Z",
+  "id": "9MRKKnQN0xI6qYdc",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "02-Download YouTube",
+  "nodes": [
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "b8927a53-2755-4364-84b1-5340c5c31af5",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.is_valid }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "4c2290d5-8e41-4f83-b4bb-9c34ad651084",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -544,
+        304
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "## Entry Point\n\nThe workflow entry point is the  node chat message.",
+        "height": 708,
+        "width": 396,
+        "color": 5
+      },
+      "id": "90483507-e54e-4ae7-81ec-f8c8c8491510",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2112,
+        -48
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Validation - URL\n\nThis node ensures that only a valid youtube video url goes forward.",
+        "height": 900,
+        "width": 492,
+        "color": 3
+      },
+      "id": "cf489d3c-a245-4fe4-adf9-9cbbdc8114fd",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1152,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Data Structuring\n\nHere is the core of the workflow, where structuring is done to get the right format to answer.\n\n**NOTE:**\n\n1. Users implementing this template must modify the language in the OpenAI prompt to suit their desired output.\n\n2. An OpenAI API key is essential and must be properly configured to support data structuring and processing.  ",
+        "height": 560,
+        "width": 460,
+        "color": 4
+      },
+      "id": "825e4ba3-92c1-4ec1-b997-188f93a18230",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        992,
+        -208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Supadata\n\nSupadata is a powerful tool that converts YouTube video URLs into structured data via a simple API. It efficiently extracts transcriptions, making it ideal for AI training, data analysis, or text-based applications.\n\n**NOTE:**\n\n1. Users implementing this template must change the language in the query parameter to suit their needs. \n\n2. An API key is required and must be configured for the workflow to function properly.",
+        "height": 900,
+        "width": 508,
+        "color": 7
+      },
+      "id": "44b60ccc-8e37-4c23-8f34-c1b011e4b6d0",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        912,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Description\n\nThis workflow simplifies access to YouTube video content converting into clear and concise transcriptions, ideal for users seeking practicality. It transcribes YouTube videos directly and returns the text, eliminating the need to watch the full video. \n\nThe need for this workflow arose from the demands of studying, where, amidst the fast-paced routine of daily life, reading transcribed content proved faster and more efficient for creating summaries than watching entire videos. Often, time constraints make it difficult to watch videos in full, and written text allows for quicker absorption of information. This solution provides a seamless way to access and review content from any YouTube video, regardless of the topic.",
+        "height": 348,
+        "width": 416
+      },
+      "id": "7ae34bd3-4479-4fae-b865-f6e46905f4aa",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2416,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "97e0c175-8060-43da-9761-5c25d660c7ed",
+              "name": "text",
+              "type": "string",
+              "value": "={{ $json.message.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4801b0dd-37f8-497b-8c0e-235cc38eff04",
+      "name": "Edit Fields - Respond to Chat Message 3",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1200,
+        -80
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "66270798-60eb-4ab8-8572-ab957474e260",
+              "name": "text",
+              "type": "string",
+              "value": "=Something went wrong with the data structuring."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "115a4e59-3a7b-4b0a-a876-c324d642a306",
+      "name": "Edit Fields - Respond to Chat Message 4",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1168,
+        128
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "=https://api.supadata.ai/v1/youtube/transcript?url={{ $json.text }}&text=true&lang=en",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "sd_f890ce59d03d2eea435d6a005b6c04a3"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 300000
+        }
+      },
+      "id": "81da4867-d04c-4715-9314-f76256abd025",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -560,
+        528
+      ],
+      "executeOnce": true,
+      "notesInFlow": true,
+      "retryOnFail": false,
+      "typeVersion": 4.2,
+      "alwaysOutputData": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini-2024-07-18",
+          "cachedResultName": "GPT-4O-MINI-2024-07-18"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an expert in grammar corrections and textual structuring.\n\nCorrect the classification of the provided text, adding commas, periods, question marks and other symbols necessary for natural and consistent reading. Do not change any words, just adjust the punctuation according to the grammatical rules and context.\n\nOrganize your content using markdown, structuring it with titles, subtitles, lists or other protected elements to clearly highlight the topics and information captured. Leave it in Portuguese and remember to always maintain the original formatting.\n\nTextual organization should always be a priority according to the content of the text, as well as the appropriate title, which must make sense.",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.content }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1acac595-af95-443a-8cd3-58e709507966",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        720,
+        -112
+      ],
+      "retryOnFail": true,
+      "typeVersion": 1.8,
+      "credentials": {
+        "openAiApi": {
+          "id": "EhYy7N3KJ4M63t0y",
+          "name": "OpenAI account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1376,
+        144
+      ],
+      "id": "851d86fc-721b-498d-8982-6c8a740fdf76",
+      "name": "When chat message received",
+      "webhookId": "53784aa9-d6e4-4832-a4c1-6293cb9c1726",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/files/{{ $('If').item.json.video_id }}.json",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        32
+      ],
+      "id": "8063b881-7ec0-43b5-b7d8-472922c3c985",
+      "name": "Read/Write Files from Disk1"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "content",
+        "options": {
+          "fileName": "=/files/{{ $('Loop Over Items').item.json.video_id }}.json"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        304,
+        -48
+      ],
+      "id": "b7c91736-cee7-418e-b20a-df7339f41403",
+      "name": "Convert to File",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "organization_id",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1216,
+        704
+      ],
+      "id": "4ca2f543-bed2-4ea9-9a30-939fbacbcf02",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hZVaT4yrkTWTTufP",
+          "mode": "list",
+          "cachedResultName": "sermons",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/hZVaT4yrkTWTTufP"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "org_id",
+              "keyValue": "={{ $json.id }}"
+            },
+            {
+              "keyName": "transcript_text",
+              "condition": "isEmpty"
+            },
+            {
+              "keyName": "do_not_process",
+              "condition": "isFalse"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -864,
+        144
+      ],
+      "id": "3d36a832-798e-4c23-ae55-9a84d0d75748",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "batchSize": 25,
+        "options": {
+          "reset": false
+        }
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -592,
+        48
+      ],
+      "id": "d22f2a50-55e9-4b83-a7a7-2c2d622e820c",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hZVaT4yrkTWTTufP",
+          "mode": "list",
+          "cachedResultName": "sermons",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/hZVaT4yrkTWTTufP"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sermon_id",
+              "keyValue": "={{ $('Loop Over Items').item.json.video_id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "do_not_process": false,
+            "transcript_text": "={{ $json.content }}",
+            "transcript_source": "YouTube",
+            "transcript_status": "Complete"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "org_id",
+              "displayName": "org_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sermon_id",
+              "displayName": "sermon_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "external_id",
+              "displayName": "external_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "speaker",
+              "displayName": "speaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "sermon_date",
+              "displayName": "sermon_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "series_name",
+              "displayName": "series_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "passage",
+              "displayName": "passage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "source_url",
+              "displayName": "source_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "transcript_text",
+              "displayName": "transcript_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_source",
+              "displayName": "transcript_source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_status",
+              "displayName": "transcript_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "view_count",
+              "displayName": "view_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "runtime",
+              "displayName": "runtime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "do_not_process",
+              "displayName": "do_not_process",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "thumbnail",
+              "displayName": "thumbnail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        656,
+        512
+      ],
+      "id": "c2af205c-35f4-471b-be23-82e3240785e5",
+      "name": "Update row(s)"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a1b0ce4b-700c-4f53-992a-77a256ba1898",
+              "leftValue": "={{ $('Get Run Configuration').item.json.save_to_table }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "f71320cd-0893-4efb-aa53-86be4ff8a34c",
+              "leftValue": "={{ $json.message }}",
+              "rightValue": "Transcript Unavailable",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        160
+      ],
+      "id": "876acd57-927e-4fe5-b48d-18f406bb2267",
+      "name": "If SaveToTable"
+    },
+    {
+      "parameters": {
+        "language": "pythonNative",
+        "pythonCode": "import re\n\ndef youtube_video_url_validator(video_url):\n    try:\n        if not video_url:\n            return {\"text\": \"URL is required.\", \"is_valid\": False}\n\n        # Clean URL\n        video_url = re.sub(r\"\\s{2,}\", \" \", str(video_url).strip())\n\n        # Allow shorter youtu.be links too, so removed the old length check\n        patterns = [\n            r'^https?://(?:www\\.)?youtube\\.com/watch\\?v=[\\w-]{11}(?:[&#?].*)?$',\n            r'^https?://youtu\\.be/[\\w-]{11}(?:[?#].*)?$',\n            r'^https?://(?:www\\.)?youtube\\.com/embed/[\\w-]{11}(?:[?#].*)?$',\n            r'^https?://(?:www\\.)?youtube\\.com/v/[\\w-]{11}(?:[?#].*)?$',\n        ]\n\n        is_valid = any(re.match(pattern, video_url) for pattern in patterns)\n\n        if not is_valid:\n            return {\"text\": \"Invalid YouTube URL format.\", \"is_valid\": False}\n\n        match = re.search(r'(?:v=|youtu\\.be/|embed/|v/)([\\w-]{11})', video_url)\n        video_url_id = match.group(1) if match else None\n\n        return {\n            \"text\": video_url,\n            \"is_valid\": True,\n            \"video_id\": video_url_id\n        }\n\n    except Exception as ex:\n        return {\"text\": str(ex), \"is_valid\": False}\n\n\noutput = []\n\nfor item in _items:\n    chat_input = item.get(\"json\", {}).get(\"video_url\", \"\")\n    result = youtube_video_url_validator(chat_input)\n    output.append({\"json\": result})\n\nreturn output"
+      },
+      "id": "622b1b3e-f039-4216-b7cc-a66d9fcf165d",
+      "name": "Validate URLs",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -880,
+        496
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1376,
+        336
+      ],
+      "id": "8b94c5d8-5985-4734-9f2c-860e61b2c506",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "4SghQMCcafBzSv2R",
+          "mode": "list",
+          "cachedResultName": "Config",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/4SghQMCcafBzSv2R"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -1152,
+        336
+      ],
+      "id": "d7fd95fa-f3a7-4994-9b44-8a9ec341fce5",
+      "name": "Get Run Configuration"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "G3cejNk0hgTiJkbQ",
+          "mode": "list",
+          "cachedResultName": "ErrorLog",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/G3cejNk0hgTiJkbQ"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "vid",
+              "displayName": "vid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        176,
+        720
+      ],
+      "id": "43b1273a-1800-4dec-b74c-5fbc47dc5dc1",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "20c51da5-8a3f-4b7c-8df4-ad53b13e4dfa",
+              "leftValue": "={{ $('Get Run Configuration').item.json.save_to_disk }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "3125d835-93c2-48b4-b1d0-b130fe53821c",
+              "leftValue": "={{ $json.message }}",
+              "rightValue": "Transcript Unavailable",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -144,
+        -32
+      ],
+      "id": "b8bf5113-a093-4358-a4b8-4d38d7aeb467",
+      "name": "If SaveToDisk And Available"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "G3cejNk0hgTiJkbQ",
+          "mode": "list",
+          "cachedResultName": "ErrorLog",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/G3cejNk0hgTiJkbQ"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "message": "={{ $json.message }}",
+            "vid": "={{ $('Loop Over Items').item.json.video_id }}",
+            "url": "={{ $('Loop Over Items').item.json.text }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "vid",
+              "displayName": "vid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        368,
+        592
+      ],
+      "id": "8918942a-be94-480e-b6a1-c9fbe4101a32",
+      "name": "Insert row1"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "Dx3yIO17tRdVKNHl",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-04T00:37:42.139Z",
+      "createdAt": "2026-04-04T00:37:42.139Z",
+      "role": "workflow:owner",
+      "workflowId": "9MRKKnQN0xI6qYdc",
+      "projectId": "6HGCoxnhApqGzoKS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-06T06:03:26.622Z",
+  "versionId": "f88ea678-f98a-4310-b19e-06266c1bf072"
+}

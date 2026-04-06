@@ -1,0 +1,1510 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Database": {
+      "ai_memory": [
+        [
+          {
+            "node": "GENERATE PROMPT",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out1": {
+      "main": [
+        [
+          {
+            "node": "Create a post",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Facebook1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "X1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LinkedIn1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GENERATE TEXT": {
+      "main": [
+        [
+          {
+            "node": "GENERATE PROMPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image": {
+      "main": [
+        [
+          {
+            "node": "Convert to Binary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meta Reference": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GENERATE PROMPT": {
+      "main": [
+        [
+          {
+            "node": "OPENAI GENERATES IMAGE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable Trigger": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Trigger": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed Trigger": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OPENAI WRITES POSTS": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OPENAI WRITES PROMPTS": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "GENERATE PROMPT",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OPENAI GENERATES IMAGE": {
+      "main": [
+        [
+          {
+            "node": "Split Out1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search google in SearchApi": {
+      "ai_tool": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking Execute workflow": {
+      "main": [
+        [
+          {
+            "node": "GENERATE TEXT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-05T20:25:05.774Z",
+  "id": "L6hQC8NISDfjlhcK",
+  "isArchived": false,
+  "meta": null,
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "sendPhoto",
+        "chatId": "123456789",
+        "binaryData": true,
+        "binaryPropertyName": "={{'data'}}",
+        "additionalFields": {
+          "caption": "={{ $('GENERATE TEXT').item.json.output }}"
+        }
+      },
+      "id": "d968ddf6-0ca9-4503-9b7c-1ecd198d5aab",
+      "name": "Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        -160,
+        624
+      ],
+      "webhookId": "f33ade31-7243-4d8f-a7e9-fc450ebf7eb5",
+      "typeVersion": 1.2,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "30ca011c-5ab1-491d-ac26-371d1d502337",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -3360,
+        528
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {},
+      "id": "adecfef1-d1ab-4ac8-8256-250f211a6c9f",
+      "name": "When clicking Execute workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -3360,
+        368
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 1,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "YOUR_AWS_SECRET_KEY_HERE-y-c"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_AWS_SECRET_KEY_HERE-y-c/edit#gid=0",
+          "cachedResultName": "Sheet1"
+        },
+        "event": "=rowAdded",
+        "options": {
+          "columnsToWatch": [
+            "Links for articles to refer"
+          ],
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "specifyRangeA1",
+              "range": "A2:A10"
+            }
+          },
+          "valueRender": "UNFORMATTED_VALUE"
+        }
+      },
+      "id": "f83ed187-ff1e-4ec3-9a5c-461c27213bd4",
+      "name": "Google Sheets Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "position": [
+        -3360,
+        992
+      ],
+      "notesInFlow": false,
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Use this link as the main reference article {{ $json.name }}. IMPORTANT: update facts to 2025вЂ“2026 and always cross-check with Tavily internet research!",
+        "options": {
+          "systemMessage": "(!IMPORTANT!) Write short, engaging posts under 1024 characters for Telegram.\n\nOverview\nYou are a brand agent for a modern beauty salon. You create professional, friendly and educational posts about hair, nails, skincare, make-up and self-care. You write varied daily content: tips, myths vs facts, trends, mini-guides, aftercare and soft promotions.\n\nGoals:\n1. ALWAYS start with real-time research using the Tavily tool to get the most accurate and up-to-date information on the topic.\n2. Adapt the tone to a beauty salon audience: mainly women 20вЂ“45 who care about appearance, health and relaxation.\n3. Make posts useful and saveable: practical tips, simple routines, what to avoid, how to prepare for procedures, aftercare.\n\nPost requirements:\n- Start with a strong hook (question, bold statement, or relatable situation).\n- Keep a warm, professional, supportive tone.\n- Use short paragraphs and, when helpful, mini-lists for readability.\n- Be educational and evidence-based (no pseudoscience).\n- Use minimal emojis (0вЂ“2 per post, only if they really add value).\n- Make a soft offer, never aggressive sales.\n- Mention sources if you reference studies or expert opinions (e.g. вЂњaccording to dermatologistsвЂ¦вЂќ).\n- Add 3вЂ“6 relevant hashtags (services + city, e.g. #haircare #facial #beautysalon).\n- End with a simple call to action: a question, invite to DM, or invite to book.\n\nTopic examples:\n- How to prepare for coloring / complex treatments.\n- Common mistakes in home hair or skin care.\n- Seasonal hairstyle / makeup / nail trends.\n- What to do after a procedure (aftercare).\n- Explaining popular salon procedures in simple language.\n\nOutput format:\n- Your ONLY output is the final Telegram post text.\n- No explanations, no meta comments, no bullet labels.\n\nAt the very end of the post, on a new line, add:\nвЂњSalon address: Example Street 10, City. For appointments send us a DM or call +1234567890.вЂќ"
+        }
+      },
+      "id": "f9e6417a-1e4e-4c93-b3d1-ec04421d385a",
+      "name": "GENERATE TEXT",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -2704,
+        480
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Create a highly detailed, photorealistic visual concept that perfectly matches this Telegram post: {{ $json.output }}.\nFocus on:\n- Main subject (client, hair, nails, skin, makeup, tools, or beauty salon interior).\n- Realistic lighting, colors and materials.\n- Modern, aesthetic beauty-salon vibe (clean, cozy, premium but approachable).\nDo NOT include any text, logos or letters on the image.",
+        "options": {
+          "systemMessage": "Overview\nYou are an AI agent that converts beauty salon Telegram posts into visual prompts for marketing graphics and photos. These visuals accompany the post and must clearly show the core idea: transformation, care, relaxation, glow, style.\n\nObjective:\n1. Analyze the beauty salon post.\n2. Extract the core message: which service, what result, what feeling for the client.\n3. Write a clear, effective prompt for a text-to-image generator (photorealistic or very realistic render).\n\nPrompt requirements:\n- Describe the model: hair, skin, nails or makeup details, age range, emotion.\n- Describe the environment: salon interior, stylist workspace, details (towels, brushes, lamps, mirrors, bottles, etc.).\n- Set the lighting: soft daylight or warm salon lighting; specify mood.\n- Set the style: вЂњphotorealistic, high-resolution, beauty photography, modern aestheticвЂќ.\n- You may describe composition: close-up of face, top-down view of manicure, half-body, full-body, etc.\n\nHard constraints:\n- Do NOT include any text, numbers, logos or lettering in the scene.\n- Do NOT use quotation marks around the prompt.\n- Do NOT repeat or paraphrase the post text.\n- Output ONLY one final prompt, as a single coherent instruction in English.\n\nExample style (do not copy verbatim):\nвЂњA photorealistic close-up of a woman with freshly styled glossy brunette hair, soft warm salon lighting, modern minimalistic beauty salon interior in the background, neutral beige and gold tones, professional beauty photography, ultra high detail, 4K, no text, no logos.вЂќ\n\nIMPORTANT: The final prompt must be optimized for AI image generators and must not include any instructions to place text on the image."
+        }
+      },
+      "id": "767c3079-3399-4753-84e6-9594c82b43e9",
+      "name": "GENERATE PROMPT",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -2224,
+        480
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "model": "gpt-image-1",
+        "prompt": "=IMPORTANT! DO NOT WRITE TEXT ON THE PICTURE! Create a perfect visual for:\n{{ $json.output }}",
+        "options": {}
+      },
+      "id": "d81ff3e7-5186-49e5-b30b-4f1fdd20d9e0",
+      "name": "OPENAI GENERATES IMAGE",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        -1248,
+        352
+      ],
+      "typeVersion": 1.8,
+      "credentials": {
+        "openAiApi": {
+          "id": "EhYy7N3KJ4M63t0y",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1",
+          "cachedResultName": "gpt-4.1"
+        },
+        "options": {}
+      },
+      "id": "8d440fad-e352-4584-bce2-181ef90f2e12",
+      "name": "OPENAI WRITES PROMPTS",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -2224,
+        688
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "EhYy7N3KJ4M63t0y",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "qwen2.5-7b-instruct-1m",
+          "mode": "list",
+          "cachedResultName": "qwen2.5-7b-instruct-1m"
+        },
+        "options": {}
+      },
+      "id": "d689bfd0-e6a9-47f4-80b9-b770f5e8b5f0",
+      "name": "OPENAI WRITES POSTS",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -2784,
+        640
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "EhYy7N3KJ4M63t0y",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "q": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', ``, 'string') }}",
+        "pagination": {},
+        "timeFilters": {},
+        "searchOptions": {},
+        "requestOptions": {},
+        "advancedOptions": {},
+        "languageSettings": {},
+        "locationSettings": {}
+      },
+      "id": "db30fb68-5d23-4c16-9fcc-1ca48af8a2ea",
+      "name": "Search google in SearchApi",
+      "type": "@searchapi/n8n-nodes-searchapi.searchApiTool",
+      "position": [
+        -2480,
+        640
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "fd7b3acf-24df-4896-bc51-af619bf1a0e8",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -2624,
+        640
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "name": "prompt",
+              "value": "={{ $json.output.prompt.replace(/\"/g, '') }}"
+            },
+            {
+              "name": "size",
+              "value": "1024x1024"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "75d4703c-d18a-41ae-8dbc-7232a13e8a49",
+      "name": "Generate Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1360,
+        688
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "d0c2b235-105e-4f76-9cb7-f29991848338",
+      "name": "Convert to Binary",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -1136,
+        688
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "#  Upload to Drive",
+        "height": 240,
+        "width": 364,
+        "color": 7
+      },
+      "id": "2f89d164-a98c-4985-bed3-bd3bd9497a59",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        1264
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Post to social media",
+        "height": 720,
+        "width": 364,
+        "color": 7
+      },
+      "id": "f9db6b51-4aa2-4dc8-81d2-19dc68fc7fa7",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        528
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Image Prompt Agent').item.json.output.title }}.png",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1TgQu-5hlOzO1X28TMMzLxfhunhPSUIqy",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1TgQu-5hlOzO1X28TMMzLxfhunhPSUIqy",
+          "cachedResultName": "AI Image Generation"
+        },
+        "options": {}
+      },
+      "id": "45d11ce2-7607-4cae-9be0-618b8ab7faaf",
+      "name": "Upload",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -160,
+        1344
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://bananaapi.com/api/n8n/generate/",
+        "options": {}
+      },
+      "id": "51059a11-f87d-46ec-950a-b67f845cd374",
+      "name": "Nano Banana",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1008,
+        1040
+      ],
+      "typeVersion": 4.3
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "id": "42b88c66-c5c8-401c-a06c-eeba55a3102a",
+      "name": "Create a post",
+      "type": "n8n-nodes-base.wordpress",
+      "position": [
+        -160,
+        352
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Post to Wordpress",
+        "height": 240,
+        "width": 364,
+        "color": 7
+      },
+      "id": "421e5cdc-d5eb-422c-baa1-e74e0b3b9c57",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -288,
+        272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Set Up Steps  \n\n## Setup is intentionally quick and simple ✨  ",
+        "height": 176,
+        "width": 912,
+        "color": 4
+      },
+      "id": "4d549a52-0ce7-42c6-a482-6dac2c3fda0c",
+      "name": "Sticky Note16",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3840,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 4. Connect Image Generation Model\n\n  - In the **Generate Image** HTTP Request node, add your API key in the header and keep the dynamic `prompt` field.\n  - The **Convert to Binary** node turns `data[0].b64_json` into an image file that downstream nodes (social, Drive, etc.) can use.\n\n  - You can swap or duplicate this node to call Clipdrop, Ideogram/Replicate, Runway, Leonardo, or other image providers, as long as they return an image file that flows into the same outputs.",
+        "height": 192,
+        "width": 880,
+        "color": 4
+      },
+      "id": "4faea51a-4e95-4168-9721-b39b6a5113f9",
+      "name": "Sticky Note17",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1360,
+        64
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Customize generation model and output format\n",
+        "height": 1236,
+        "width": 1196,
+        "color": 7
+      },
+      "id": "29c67123-408f-468c-acc7-464cdf8fae1f",
+      "name": "Sticky Note18",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1776,
+        272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "additionalFields": {}
+      },
+      "id": "26189630-6e2a-44c5-97c2-ca37adc5e422",
+      "name": "X1",
+      "type": "n8n-nodes-base.twitter",
+      "position": [
+        -160,
+        928
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "options": {}
+      },
+      "id": "7b67dcba-f27b-48db-8503-fe9644a22afb",
+      "name": "Facebook1",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "position": [
+        -160,
+        784
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "authentication": "communityManagement",
+        "person": "[CONFIGURE_YOUR_LINKEDIN_PERSON_ID]",
+        "text": "={{ $json['choices[0].message.content'] }}",
+        "additionalFields": {}
+      },
+      "id": "b01a7c89-a98a-46aa-b9eb-dd5d5b43bc50",
+      "name": "LinkedIn1",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        -160,
+        1088
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "choices[0].message.content",
+        "options": {}
+      },
+      "id": "10254ea1-dda2-4600-b7e3-11db99a9ec23",
+      "name": "Split Out1",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        -480,
+        832
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# [made with ❤️ by N8ner 👈 click! Feel free to message me!](https://community.n8n.io/u/n8ner/badges)  [](https://i.ibb.co/cSGCGn3H/Replace-image-1-2k-202601191958.jpg#full-width)\n",
+        "height": 80,
+        "width": 1104
+      },
+      "id": "1f928a3b-19c7-4d79-b15a-7ef54e1c614c",
+      "name": "Sticky Note19",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4960,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 2. Connect Chat Models\n\n- Attach your API credentials to the chat nodes to enable text generation with the current configuration.  \n- Swap in alternative LLMs like OpenAI, Claude, Gemini, Mistral, DeepSeek, or local/alternative providers via Anthropic, Google Gemini, Mistral Cloud, DeepSeek, Ollama, or OpenRouter chat nodes for different styles and costs.  \n",
+        "height": 176,
+        "width": 832,
+        "color": 4
+      },
+      "id": "42f3b0a8-05a5-4538-a5bc-0f04e8705063",
+      "name": "Sticky Note20",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2912,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 5.  Link Your Social Media & CMS  \n\n- Connect WordPress, Telegram, X (Twitter), Facebook, and LinkedIn nodes with the accounts you actually use so the workflow can auto‑publish directly to those channels. \n- You only need to configure the platforms that matter for your current content strategy; the rest can stay inactive.",
+        "height": 192,
+        "width": 496,
+        "color": 4
+      },
+      "id": "ed6e6ed9-6ff9-4b19-8378-fd81e1268b23",
+      "name": "Sticky Note21",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -416,
+        48
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 3. Customize Prompts  \n\n- Edit the system prompts in the “generate text” agent to reflect your brand voice, preferred structure (headings, CTAs, length), and target audience specifics. \n- Adjust the prompts in the “generate prompt” agent to define your visual style — color palette, composition, background, mood — so images look on‑brand across posts.",
+        "height": 176,
+        "width": 688,
+        "color": 4
+      },
+      "id": "bfeb4a55-b0ab-42a0-ab15-c900e6a2e7fe",
+      "name": "Sticky Note22",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2064,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Detail prompts for posts and images up to your beauty salon",
+        "height": 1232,
+        "width": 1084,
+        "color": 7
+      },
+      "id": "3c7d9b3b-312e-46cb-b798-d8bdf711aa11",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2896,
+        272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "14800ccf-2f59-471a-8dfc-c834aa91f387",
+      "name": "AWS Bedrock Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAwsBedrock",
+      "position": [
+        -2304,
+        1248
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "33d66c6a-ae45-41a9-b9c2-f249dd2ba411",
+      "name": "Groq Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "position": [
+        -2128,
+        1248
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": "pixtral-large-latest",
+        "options": {}
+      },
+      "id": "79e7b96c-6a7f-44b3-8eb3-2ca27158357f",
+      "name": "Mistral Cloud Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "position": [
+        -2640,
+        1056
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "6583199e-cddc-4543-848a-8697c8ba3f95",
+      "name": "OpenRouter Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "position": [
+        -2464,
+        1056
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "claude-3-7-sonnet-20250219",
+          "cachedResultName": "Claude 3.7 Sonnet"
+        },
+        "options": {}
+      },
+      "id": "bd3a8322-17c7-47dc-be95-536016bc7d39",
+      "name": "Anthropic Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "position": [
+        -1952,
+        1248
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "9a034d92-638d-43da-aa42-ade2a4401912",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -2816,
+        1248
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "866f1b13-7cd3-408e-92eb-5be92247c4fe",
+      "name": "xAI Grok Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatXAiGrok",
+      "position": [
+        -2128,
+        1056
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "435735ae-4298-4f2e-bfd7-fc8d263c269b",
+      "name": "DeepSeek Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "position": [
+        -2640,
+        1248
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": "https://huggingface.co/black-forest-labs/FLUX.1-dev",
+        "options": {}
+      },
+      "id": "f44e72b6-6ff0-4b0e-aee2-823d653f7ed3",
+      "name": "Hugging Face Inference Model",
+      "type": "@n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference",
+      "position": [
+        -1952,
+        1056
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "80728a05-7de0-4fba-b29c-71b661d3d44d",
+      "name": "Ollama Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "position": [
+        -2304,
+        1056
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c13c0184-3a12-4c95-b3b1-9a382646b176",
+      "name": "Azure OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
+      "position": [
+        -2464,
+        1248
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "7efcb0d5-8c04-4233-a0fa-a46edb0985b4",
+      "name": "Database",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -2080,
+        688
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "content": "## ⚠️To Use Custom Models with HTTP requests - Add Convert to Binary Code Node next Step. For Example:",
+        "height": 304,
+        "width": 560,
+        "color": 3
+      },
+      "id": "cc6b757f-455f-46ad-8299-4013217f5e31",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1472,
+        544
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Choose Your Favourite Chat Model",
+        "height": 512,
+        "width": 1024,
+        "color": 5
+      },
+      "id": "15b3f1bd-7291-4ddc-844b-1bce5b0a0ca6",
+      "name": "Sticky Note24",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -2864,
+        912
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "#  Choose Your Favourite Image Generation Model",
+        "height": 512,
+        "width": 1136,
+        "color": 5
+      },
+      "id": "b6a8a64c-8696-40ad-a2a0-fbd8d064ce9b",
+      "name": "Sticky Note25",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1744,
+        912
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Launcher\n",
+        "height": 1236,
+        "width": 260,
+        "color": 7
+      },
+      "id": "fa45dc10-9349-476e-b9b1-7ae47ae6e90d",
+      "name": "Sticky Note26",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3440,
+        272
+      ],
+      "typeVersion": 1,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/ideogram-ai/ideogram-v2/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $REPLICATE_API_TOKEN"
+            },
+            {
+              "name": "Prefer",
+              "value": "wait"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"input\": {\n    \"prompt\": \"An illustration of a black running shoe with the text \\\"Run AI with an API\\\" written on the shoe. The shoe is placed on a blue background. The text is white and bold. The overall image has a modern and techy vibe.\",\n    \"aspect_ratio\": \"16:9\"\n  }\n}",
+        "options": {}
+      },
+      "id": "d70ce79f-bccf-4077-b006-44b9f05d8314",
+      "name": "Replicate API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1696,
+        1040
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT_ID/locations/LOCATION/YOUR_AWS_SECRET_KEY_HERE@002:predict",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer $(gcloud auth print-access-token)"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json; charset=utf-8",
+        "body": "0",
+        "options": {}
+      },
+      "id": "f15e5e88-72d4-494c-a01b-118f18a74033",
+      "name": "Imagen Google API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1456,
+        1040
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://uu149rez6gw9ehej.eu-west-1.aws.endpoints.huggingface.cloud/distilbert-sentiment",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <Token>"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "{\"inputs\": \"Deploying my first endpoint was an amazing experience.\"}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "25ea0e6f-87c9-4c51-959e-813e3b3c37bf",
+      "name": "HuggingFace API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1232,
+        1040
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api-singapore.klingai.com/v1/images/text2image",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer YOUR_TOKEN_HERE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n\t\"code\": 0,\n  \"message\": \"string\",\n  \"request_id\": \"string\",\n  \"data\":[\n    {\n      \"task_id\": \"string\",\n      \"task_status\": \"string\",\n      \"task_status_msg\": \"string\",\n      \"created_at\": 1722769557708,\n      \"updated_at\": 1722769557708,\n      \"task_result\":{\n        \"images\":[\n          {\n            \"index\": 0,\n            \"url\": \"string\"\n          }\n      \t]\n      }\n    }\n  ]\n}",
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "2fa2ff6e-acc8-4e1d-872d-cf7051c339e9",
+      "name": "Kling Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1696,
+        1232
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.dev.runwayml.com/v1/text_to_image",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{ YOUR API KEY }}"
+            },
+            {
+              "name": "X-Runway-Version",
+              "value": "2024-11-06"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"promptText\": \"string\",\n  \"ratio\": \"1920:1080\",\n  \"seed\": 4294967295,\n  \"model\": \"gen4_image\",\n  \"referenceImages\": [\n    {\n      \"uri\": \"http://example.com\",\n      \"tag\": \"string\"\n    }\n  ],\n  \"contentModeration\": {\n    \"publicFigureThreshold\": \"auto\"\n  }\n}",
+        "options": {}
+      },
+      "id": "286f2b0b-cc2a-4c24-ba20-b112d60c047c",
+      "name": "Runway Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1456,
+        1232
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "https://cloud.leonardo.ai/api/rest/v1/generations/id",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "id": "0e93e6df-14e3-4b22-b7fb-c7eb458c0781",
+      "name": "Leonardo Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1232,
+        1232
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {},
+      "id": "8c99b514-979b-4637-b514-4a413ab3cb99",
+      "name": "APITemplate.io",
+      "type": "n8n-nodes-base.apiTemplateIo",
+      "position": [
+        -1008,
+        1232
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.ideogram.ai/v1/ideogram-v3/generate",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Api-Key",
+              "value": "<apiKey>"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "A photo of a cat sleeping on a couch."
+            },
+            {
+              "name": "rendering_speed",
+              "value": "TURBO"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f5e9eb2-90bf-4a05-8b11-b9dbe6b0bc01",
+      "name": "Ideogram API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -784,
+        1040
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://clipdrop-api.co/text-to-image/v1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7a6f5fc9-9ebc-458c-9489-a2d1d6c49b39",
+      "name": "Clipdrop API",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -784,
+        1232
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "id": "781d0d77-ec50-41c0-95c9-1dc935cee4af",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -2816,
+        1056
+      ],
+      "typeVersion": 1.3,
+      "credentials": {
+        "openAiApi": {
+          "id": "EhYy7N3KJ4M63t0y",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "tableName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "additionalFields": {},
+        "options": {}
+      },
+      "id": "58a984b0-4e81-498b-8e36-8007a78d90e6",
+      "name": "Postgres Trigger",
+      "type": "n8n-nodes-base.postgresTrigger",
+      "position": [
+        -3360,
+        1328
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {}
+          ]
+        },
+        "baseId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "tableId": {
+          "__rl": true,
+          "mode": "url",
+          "value": ""
+        },
+        "additionalFields": {}
+      },
+      "id": "864b1e05-7615-41c3-bac1-7fe17591269e",
+      "name": "Airtable Trigger",
+      "type": "n8n-nodes-base.airtableTrigger",
+      "position": [
+        -3360,
+        1168
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        }
+      },
+      "id": "f5998893-e053-488d-8a86-6d87362a6ffb",
+      "name": "RSS Feed Trigger",
+      "type": "n8n-nodes-base.rssFeedReadTrigger",
+      "position": [
+        -3360,
+        848
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "77b5d10d-a706-4f05-9dc7-0337cc2a37e0",
+      "name": "Meta Reference",
+      "type": "n8n-nodes-base.facebookTrigger",
+      "position": [
+        -3360,
+        688
+      ],
+      "webhookId": "f7095672-42fd-44ee-b2a4-81d8c5e80cc7",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 1. Choose Your Trigger  \n\n- **Scheduled automatic generation:** Run the parent workflow on a schedule (for example, once per day at 9 AM) to publish new content regularly.\n\n- **Google Sheets trigger:** Generate content when a new row with a reference link or topic is added to your sheet. Use it when you manage ideas or briefs in Google Sheets and want the workflow to react as soon as a new idea appears.\n\n- **RSS Feed trigger:** Start the workflow when new items appear in a selected RSS feed. Ideal for turning fresh blog posts, news, or industry updates into social media content or automated summaries.\n\n- **Meta (Facebook/Instagram) webhook:** Use the Meta Reference trigger to fire the workflow on incoming webhooks from Meta (for example, new comments, messages, or events). Helpful when you want to auto‑respond, log activity, or generate follow‑up content from Meta activity.\n\n- **Airtable trigger:** Start the workflow when records in a selected Airtable base/table change (for example, a new idea, brief, or status update), so your posts react instantly to updates in your Airtable content board.\n\n- **Postgres trigger:** Fire the workflow when new rows are inserted or existing rows are updated in a connected PostgreSQL table, letting you drive content generation from events in your app database or Supabase‑style back end.\n\n- **Manual start:** Hit **Execute workflow** whenever you want to spin up a batch of posts on demand, test new prompt settings, or debug the flow step by step.\n",
+        "height": 848,
+        "width": 368,
+        "color": 4
+      },
+      "id": "9fdd06f3-d687-4780-a195-1eb1ffe6a008",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3840,
+        272
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Daily AI social content for beauty brands\n\n## How it works\n\n### Section 1 — Content sources & triggers\nControls when a new post is created: schedule‑based, manual test runs, or new ideas arriving from a reference link.\n### Section 2 — AI post generation\nGENERATE TEXT writes the final post using your brand system message, web research and short‑term memory. Edit the system message here to match your beauty or wellness brand.\n### Section 3 — Visual prompt\nThe GENERATE PROMPT agent converts the post into a detailed text‑to‑image prompt describing subject, environment, lighting and style, without any text or logos.\n### Section 4 — AI image generation\ngpt‑image‑1 (or other providers) generates the final beauty‑salon visual that matches the post. You can swap or disable providers depending on your stack.\n### Section 5 — Distribution & posting\nSplit Out sends the generated content to Telegram and optional social channels (Facebook, Instagram, LinkedIn, X), CMS and cloud.\n\n\n## Customization\nUpdate the system message in GENERATE TEXT to match your brand, niche and language, and keep only the image providers and channels you actually use.",
+        "height": 560,
+        "width": 1104
+      },
+      "id": "34579e24-b164-418c-a090-fd28e1456af3",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -4960,
+        176
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "pinData": {
+    "X1": [
+      {
+        "json": {
+          "code": 1,
+          "name": "First item"
+        }
+      },
+      {
+        "json": {
+          "code": 2,
+          "name": "Second item"
+        }
+      }
+    ],
+    "Facebook1": [
+      {
+        "json": {
+          "code": 1,
+          "name": "First item"
+        }
+      },
+      {
+        "json": {
+          "code": 2,
+          "name": "Second item"
+        }
+      }
+    ],
+    "LinkedIn1": [
+      {
+        "json": {
+          "code": 1,
+          "name": "First item"
+        }
+      },
+      {
+        "json": {
+          "code": 2,
+          "name": "Second item"
+        }
+      }
+    ],
+    "APITemplate.io": [
+      {
+        "json": {
+          "code": 1,
+          "name": "First item"
+        }
+      },
+      {
+        "json": {
+          "code": 2,
+          "name": "Second item"
+        }
+      }
+    ],
+    "Postgres Trigger": [
+      {
+        "json": {
+          "code": 1,
+          "name": "First item"
+        }
+      },
+      {
+        "json": {
+          "code": 2,
+          "name": "Second item"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-05T20:25:05.789Z",
+      "createdAt": "2026-04-05T20:25:05.789Z",
+      "role": "workflow:owner",
+      "workflowId": "L6hQC8NISDfjlhcK",
+      "projectId": "6HGCoxnhApqGzoKS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-05T20:26:37.431Z",
+  "versionId": "506942de-32e3-49e3-8d60-8ec5124681a8"
+}

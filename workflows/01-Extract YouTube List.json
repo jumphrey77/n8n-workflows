@@ -1,0 +1,767 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Execution Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape YouTube Code": {
+      "main": [
+        [
+          {
+            "node": "Video Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Row Exists": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Config": {
+      "main": [
+        [
+          {
+            "node": "OrganizationConfig",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get GetOrganization": {
+      "main": [
+        [
+          {
+            "node": "OrganizationConfig",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OrganizationConfig": {
+      "main": [
+        [
+          {
+            "node": "Scrape YouTube Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video Data": {
+      "main": [
+        [
+          {
+            "node": "Check If Row Exists",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Call '02-Download YouTube'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execution Context": {
+      "main": [
+        [
+          {
+            "node": "Get GetOrganization",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Execution Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-04-04T23:59:25.389Z",
+  "id": "Oiov360aGLdUzzWy",
+  "isArchived": false,
+  "meta": null,
+  "name": "01-Extract YouTube List",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1664,
+        -176
+      ],
+      "id": "b37069f7-c93d-4e14-a5c8-6f0f198c47d7",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code Node\n// Expected input fields:\n//   \"youtube-channel\" : channel URL, handle URL, or channel identifier\n//   \"video_limit\"     : max number of videos to return\n//   \"language\"        : optional, defaults to \"en\"\n//\n// Output format:\n//   return [{ json: result }];\n\nasync function scanYouTubeChannelVideos(channelInput, videoLimit = 25, language = 'en') {\n  const startedAt = new Date().toISOString();\n  const runtimeMsStart = Date.now();\n\n  if (!channelInput || typeof channelInput !== 'string') {\n    throw new Error('Missing required input: \"youtube-channel\"');\n  }\n\n  const limit = Math.max(1, Number(videoLimit) || 25);\n  const lang = (language || 'en').toLowerCase();\n\n  function normalizeChannelVideosUrl(input) {\n    let value = input.trim();\n\n    if (value.startsWith('@')) {\n      return `https://www.youtube.com/${value}/videos`;\n    }\n\n    if (value.startsWith('http://') || value.startsWith('https://')) {\n      value = value.replace(/\\/+$/, '');\n\n      if (/\\/videos(\\?|$)/i.test(value)) {\n        return value;\n      }\n\n      return `${value}/videos`;\n    }\n\n    return `https://www.youtube.com/@${value}/streams`;\n  }\n\n  const videosUrl = normalizeChannelVideosUrl(channelInput);\n\n  const response = await this.helpers.httpRequest({\n    method: 'GET',\n    url: videosUrl,\n    headers: {\n      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',\n      'Accept-Language': lang === 'en' ? 'en-US,en;q=0.9' : `${lang},en;q=0.9`,\n    },\n    timeout: 30000,\n    returnFullResponse: false,\n  });\n\n  if (!response || typeof response !== 'string') {\n    throw new Error('Failed to load YouTube channel page.');\n  }\n\n  const initialDataMatch =\n    response.match(/var ytInitialData = (.*?);<\\/script>/s) ||\n    response.match(/window\\[\"ytInitialData\"\\] = (.*?);<\\/script>/s) ||\n    response.match(/ytInitialData\"\\s*:\\s*(\\{.*?\\})\\s*,\\s*\"metadata\"/s);\n\n  if (!initialDataMatch) {\n    throw new Error('Could not locate ytInitialData on the YouTube page. YouTube page structure may have changed.');\n  }\n\n  let ytInitialData;\n  try {\n    ytInitialData = JSON.parse(initialDataMatch[1]);\n  } catch (err) {\n    throw new Error(`Unable to parse ytInitialData JSON: ${err.message}`);\n  }\n\n  function findObjectsByKey(obj, keyName, results = []) {\n    if (!obj || typeof obj !== 'object') return results;\n\n    if (Object.prototype.hasOwnProperty.call(obj, keyName)) {\n      results.push(obj[keyName]);\n    }\n\n    if (Array.isArray(obj)) {\n      for (const item of obj) {\n        findObjectsByKey(item, keyName, results);\n      }\n    } else {\n      for (const key of Object.keys(obj)) {\n        findObjectsByKey(obj[key], keyName, results);\n      }\n    }\n\n    return results;\n  }\n\n  const videoRenderers = findObjectsByKey(ytInitialData, 'videoRenderer');\n\n  const videos = [];\n  const seen = new Set();\n\n  for (const vr of videoRenderers) {\n    if (!vr || !vr.videoId) continue;\n\n    const id = vr.videoId;\n    const url = `https://www.youtube.com/watch?v=${id}`;\n\n    if (seen.has(id)) continue;\n    seen.add(id);\n\n    const title =\n      vr.title?.runs?.map(r => r.text).join('') ||\n      vr.title?.simpleText ||\n      null;\n\n    var date =\n      vr.publishedTimeText?.simpleText ||\n      vr.publishedTimeText?.runs?.map(r => r.text).join('') ||\n      null;\n\n    const runtime =\n      vr.lengthText?.simpleText ||\n      vr.lengthText?.runs?.map(r => r.text).join('') ||\n      null;\n\n    var viewCount =\n      vr.viewCountText?.simpleText ||\n      vr.viewCountText?.runs?.map(r => r.text).join('') ||\n      null;\n    \n    //FIXES\n    viewCount = viewCount.slice(0, -6)\n    date = title.substring(title.indexOf('|') + 1).trim()\n    \n    videos.push({\n      id,\n      url,\n      title,\n      date,\n      // extra available metadata\n      runtime,\n      viewCount,\n      thumbnail: vr.thumbnail?.thumbnails?.slice(-1)[0]?.url || null,\n      descriptionSnippet:\n        vr.descriptionSnippet?.runs?.map(r => r.text).join('') || null,\n    });\n\n    if (videos.length >= limit) break;\n  }\n\n  const finishedAt = new Date().toISOString();\n\n  return {\n    runtime: {\n      startedAt,\n      finishedAt,\n      durationMs: Date.now() - runtimeMsStart,\n      requestedLimit: limit,\n      returnedVideos: videos.length,\n      sourceUrl: videosUrl,\n      language: lang,\n    },\n    videos: videos.map(v => ({\n      id: v.id,\n      url: v.url,\n      title: v.title,\n      date: v.date,\n    })),\n    availableMetaData: {\n      includedInRawExtraction: [\n        'runtime',\n        'viewCount',\n        'thumbnail',\n        'descriptionSnippet',\n      ],\n    },\n    rawVideosExtended: videos,\n  };\n}\n\n// ---- function call ----\n\nconst input = $input.first()?.json || {};\n\nconst channelInput = input['youtube_channel'];  //FIXED\nconst videoLimit = input['video_limit'];\nconst language = input['language'] || 'en';\n\nconst result = await scanYouTubeChannelVideos.call(this, channelInput, videoLimit, language);\n\nreturn [{ json: result }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -80
+      ],
+      "id": "be98b0aa-f928-464e-b059-ea14cc72260e",
+      "name": "Scrape YouTube Code"
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hZVaT4yrkTWTTufP",
+          "mode": "list",
+          "cachedResultName": "sermons",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/hZVaT4yrkTWTTufP"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sermon_id",
+              "keyValue": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -272,
+        -80
+      ],
+      "id": "3319875d-9509-45fc-90d1-debe7da81a2a",
+      "name": "Check If Row Exists",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "9MRKKnQN0xI6qYdc",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/9MRKKnQN0xI6qYdc",
+          "cachedResultName": "02-Download YouTube"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "organization_id": "={{ $('OrganizationConfig').item.json.id }}"
+          },
+          "matchingColumns": [
+            "organization_id"
+          ],
+          "schema": [
+            {
+              "id": "organization_id",
+              "displayName": "organization_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        512,
+        -64
+      ],
+      "id": "a8af2689-16e7-481e-b3fb-b9f8d21c80b2",
+      "name": "Call '02-Download YouTube'"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "hZVaT4yrkTWTTufP",
+          "mode": "list",
+          "cachedResultName": "sermons",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/hZVaT4yrkTWTTufP"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "sermon_id",
+              "keyValue": "={{ $('Video Data').item.json.id }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "title": "={{ $('Video Data').item.json.title }}",
+            "runtime": "={{ $('Video Data').item.json.runtime }}",
+            "language": "={{ $('Scrape YouTube Code').item.json.runtime.language }}",
+            "do_not_process": false,
+            "speaker": "={{ $('OrganizationConfig').item.json.pastor_name }}",
+            "sermon_date": "={{ $('Video Data').item.json.date }}",
+            "view_count": "={{ $json.viewCount }}",
+            "sermon_id": "={{ $('Video Data').item.json.id }}",
+            "external_id": "={{ $('Video Data').item.json.id }}",
+            "video_url": "={{ $('Video Data').item.json.url }}",
+            "source_url": "={{ $('OrganizationConfig').item.json.youtube_channel }}",
+            "thumbnail": "={{ $('Video Data').item.json.thumbnail }}",
+            "org_id": "={{ $('OrganizationConfig').item.json.id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "org_id",
+              "displayName": "org_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sermon_id",
+              "displayName": "sermon_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "external_id",
+              "displayName": "external_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "speaker",
+              "displayName": "speaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sermon_date",
+              "displayName": "sermon_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "series_name",
+              "displayName": "series_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "passage",
+              "displayName": "passage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source_url",
+              "displayName": "source_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_text",
+              "displayName": "transcript_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_source",
+              "displayName": "transcript_source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_status",
+              "displayName": "transcript_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "view_count",
+              "displayName": "view_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "runtime",
+              "displayName": "runtime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "do_not_process",
+              "displayName": "do_not_process",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "thumbnail",
+              "displayName": "thumbnail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        -208
+      ],
+      "id": "b641747c-7938-47d8-be48-251c22bc3d2a",
+      "name": "Upsert row(s)",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "4SghQMCcafBzSv2R",
+          "mode": "list",
+          "cachedResultName": "config",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/4SghQMCcafBzSv2R"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyValue": "1"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -1120,
+        0
+      ],
+      "id": "f35bcf46-2539-4429-a58d-22f0bff16641",
+      "name": "Get Config"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "JMUNIddJc0mnis7t",
+          "mode": "list",
+          "cachedResultName": "organizations",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/JMUNIddJc0mnis7t"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": []
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -1120,
+        -192
+      ],
+      "id": "1316bd93-6a77-44b0-9135-14654728a0e7",
+      "name": "Get GetOrganization"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "advanced": true,
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "config_id",
+              "field2": "id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -896,
+        -80
+      ],
+      "id": "d8022676-2ff7-4348-b1a6-a8efd4352e5e",
+      "name": "OrganizationConfig"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "rawVideosExtended",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -80
+      ],
+      "id": "3520ed99-2823-4859-bbeb-ee8f3f441168",
+      "name": "Video Data"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.filter(item => item.json.do_not_process !== true);\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -608,
+        144
+      ],
+      "id": "eb631957-111e-45ae-81ad-e9df7456d635",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "70419f90-5a2a-4826-b55a-27376c14d9e1",
+              "leftValue": "{{ $(\"Check If Row Exists\").item.json.id}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -112,
+        -80
+      ],
+      "id": "e6ac11db-e2f3-4f76-a2ae-ebad8994bb3f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f6476adf-ded4-44ec-bf80-38d178212222",
+              "name": "id",
+              "value": "={{ $('OrganizationConfig').item.json.id }}",
+              "type": "number"
+            },
+            {
+              "id": "d4e99d32-f0da-441b-9747-9d791204388a",
+              "name": "name",
+              "value": "={{ $('OrganizationConfig').item.json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        336,
+        -64
+      ],
+      "id": "c97c9a1f-6a7a-4369-8f4a-6eaa120413af",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "daf6780f-a202-4b61-899e-b6b2cfb18bbd",
+              "name": "execution_mode",
+              "value": "chat",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "530f2eff-fd22-4e53-9bda-e36ab290295c",
+      "name": "Execution Context",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -1392,
+        -96
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1952,
+        16
+      ],
+      "id": "361eeaac-8cbc-4f57-b9ff-2ee0bc1c2b71",
+      "name": "When chat message received",
+      "webhookId": "46df2f26-c730-43c4-918f-46fe91ece056"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "25514258-3d13-45d3-9268-c94386013027",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "sendMessage",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "ae14c01b-88bf-4562-9e1e-141b214f6a0d",
+              "leftValue": "={{ $json.chatInput }}",
+              "rightValue": "https://www.youtube.com/watch?v=",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1664,
+        16
+      ],
+      "id": "82152acd-138a-492e-9146-c307875b23e7",
+      "name": "If1"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-04T23:59:25.393Z",
+      "createdAt": "2026-04-04T23:59:25.393Z",
+      "role": "workflow:owner",
+      "workflowId": "Oiov360aGLdUzzWy",
+      "projectId": "6HGCoxnhApqGzoKS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-06T06:28:08.555Z",
+  "versionId": "aaaa8297-abb3-4510-952a-c0b6be1f2c7b"
+}

@@ -1,0 +1,363 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {
+    "Get Organaizations": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Get Rows Old Videos": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Rows Old Videos",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Organaizations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-04-06T00:00:44.271Z",
+  "id": "Ozt9XOJBMLKuGXiZ",
+  "isArchived": false,
+  "meta": null,
+  "name": "99-Data Fixes",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "### UPDATES\n1.  Move to New Table\n2. Update \"61 \"Views\" issue\n3. All have Date in Title - Extract Date from Title\n",
+        "height": 704,
+        "width": 1200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -752,
+        -272
+      ],
+      "typeVersion": 1,
+      "id": "d648818a-79ac-4af7-9a92-05d32ffa61be",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "query": "SELECT input1.*, input2.* FROM input1 LEFT JOIN input2 ON input1.location = input2.abbr",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -240,
+        16
+      ],
+      "id": "d63f3750-f26f-4e7d-bb76-8c228031756e",
+      "name": "Merge",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "JMUNIddJc0mnis7t",
+          "mode": "list",
+          "cachedResultName": "organizations",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/JMUNIddJc0mnis7t"
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        96
+      ],
+      "id": "216bd719-b26b-4ad5-bc92-fc2073a9573a",
+      "name": "Get Organaizations"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "pLOz1DDpgyjVtZ9N",
+          "mode": "list",
+          "cachedResultName": "videos",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/pLOz1DDpgyjVtZ9N"
+        },
+        "filters": {
+          "conditions": []
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -432,
+        -48
+      ],
+      "id": "fb13eeec-918c-46be-8e18-449dd95fda0d",
+      "name": "Get Rows Old Videos"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        32
+      ],
+      "id": "a9bf1b77-5a96-4166-bb0e-18c498b28f43",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "hZVaT4yrkTWTTufP",
+          "mode": "list",
+          "cachedResultName": "sermons",
+          "cachedResultUrl": "/projects/6HGCoxnhApqGzoKS/datatables/hZVaT4yrkTWTTufP"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "title": "={{ $json.title }}",
+            "video_url": "={{ $json.url }}",
+            "transcript_text": "={{ $json.transcript }}",
+            "view_count": "={{ $json.viewCount.slice(0, -6) }}",
+            "language": "={{ $json.language }}",
+            "runtime": "={{ $json.runtime }}",
+            "external_id": "={{ $json.vid }}",
+            "sermon_date": "={{ $json.title.substring($json.title.indexOf('|') + 1).trim() }}",
+            "speaker": "={{ $json.pastor_name }}",
+            "source_url": "={{ $json.youtube_channel }}",
+            "sermon_id": "={{ $json.vid }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "sermon_id",
+              "displayName": "sermon_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "external_id",
+              "displayName": "external_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "speaker",
+              "displayName": "speaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "sermon_date",
+              "displayName": "sermon_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "series_name",
+              "displayName": "series_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "passage",
+              "displayName": "passage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "source_url",
+              "displayName": "source_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_text",
+              "displayName": "transcript_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_source",
+              "displayName": "transcript_source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "transcript_status",
+              "displayName": "transcript_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "view_count",
+              "displayName": "view_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "language",
+              "displayName": "language",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "runtime",
+              "displayName": "runtime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        -32,
+        16
+      ],
+      "id": "085b2817-094d-4e39-9c5e-5183d1331608",
+      "name": "Insert row"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-04-06T00:00:44.274Z",
+      "createdAt": "2026-04-06T00:00:44.274Z",
+      "role": "workflow:owner",
+      "workflowId": "Ozt9XOJBMLKuGXiZ",
+      "projectId": "6HGCoxnhApqGzoKS"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-04-06T02:04:49.839Z",
+  "versionId": "87294bc3-1c31-4b97-92eb-c10c54939098"
+}
